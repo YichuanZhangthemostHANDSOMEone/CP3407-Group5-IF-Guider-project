@@ -4,6 +4,7 @@ import { LegoSegmenter } from '@modules/segmentation';
 import { LegoBoardAnalyzer, CellColorResult } from '@modules/legoBoardAnalyzer';
 import { showLoadingIndicator } from '@modules/ui';
 import { legoColors } from '@modules/legoColors';
+import { loadColorMap } from '@modules/colorMap';
 import cv from '@techstark/opencv-js';
 
 // 可选调试：你也可以直接复制 drawWarpedGrid 到此文件
@@ -24,7 +25,7 @@ export class VisionApp {
 
   async start() {
     showLoadingIndicator(true);
-    await this.camera.start();
+    await Promise.all([this.camera.start(), loadColorMap()]);
     showLoadingIndicator(false);
 
     // overlay 与 capture 必须和摄像头分辨率完全一致
@@ -232,8 +233,11 @@ export class VisionApp {
         ctx.closePath();
         ctx.stroke();
         const {x, y} = hull[0];
-        // 只显示component字段
-        ctx.fillText(`${cellsInGroup[0].component}`, x + 4, y + 4);
+        ctx.fillText(
+          `${cellsInGroup[0].protocol} ${cellsInGroup[0].component}`,
+          x + 4,
+          y + 4
+        );
       }
     }
   }
