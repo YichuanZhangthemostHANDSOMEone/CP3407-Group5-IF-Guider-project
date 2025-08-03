@@ -292,7 +292,7 @@ export class VisionApp {
     }
     const pts: Array<{ x: number; y: number }> = [];
     const data = approx.data32S;
-    for (let i = 0; i < 4; i++) pts.push({ x: data[i*2], y: data[i*2+1] });
+    for (let i = 0; i < 4; i++) pts.push({x: data[i * 2], y: data[i * 2 + 1]});
     approx.delete();
 
     const dstQuad = cv.matFromArray(4, 1, cv.CV_32FC2, [
@@ -340,11 +340,18 @@ export class VisionApp {
    */
   private draw(cells: CellColorResult[]) {
     const ctx = this.overlay.getContext('2d')!;
-    this.overlay.width = this.capture.width;
-    this.overlay.height = this.capture.height;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
+    // [1] 获取 overlay 在页面实际显示的 CSS 尺寸
+    const {width: dispW, height: dispH} = this.overlay.getBoundingClientRect();
+    // [2] 获取 dpr
+    const dpr = window.devicePixelRatio || 1;
+    // [3] 设置 overlay 的物理像素尺寸，和显示一致
+    this.overlay.width = Math.round(dispW * dpr);
+    this.overlay.height = Math.round(dispH * dpr);
+    // [4] 设置坐标缩放
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, dispW, dispH);
 
+    // === 以下为你原有的绘制内容，直接保留 ===
     const colorMap = new Map<string, string>(
         legoColors.map(c => [c.name, `rgb(${c.rgb[0]}, ${c.rgb[1]}, ${c.rgb[2]})`])
     );
@@ -370,8 +377,8 @@ export class VisionApp {
         const stroke = colorMap.get(color) || '#f00';
         ctx.strokeStyle = stroke;
         const pts = cellsInGroup.reduce((arr, c) => {
-          c.quad.forEach(({ x, y }) => {
-            arr.push({ x, y });
+          c.quad.forEach(({x, y}) => {
+            arr.push({x, y});
           });
           return arr;
         }, [] as { x: number; y: number }[]);
@@ -381,14 +388,14 @@ export class VisionApp {
         hull.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
         ctx.closePath();
         ctx.stroke();
-        const { x, y } = hull[0];
+        const {x, y} = hull[0];
         ctx.fillText(`${color} (row ${row})`, x + 4, y + 4);
       }
     }
   }
 }
 
-/**
+  /**
  * 在 warp 后 canvas 上画标准网格
  */
 function drawWarpedGrid(

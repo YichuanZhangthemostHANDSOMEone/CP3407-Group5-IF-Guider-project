@@ -146,19 +146,6 @@ export class LegoBoardAnalyzer {
     const M = cv.getPerspectiveTransform(srcQuadMat, dstQuad);
     const warped = new cv.Mat();
     cv.warpPerspective(rgb, warped, M, new cv.Size(dstWidth, dstHeight));
-//     // 1. 创建一个 canvas 用于显示 warped 结果
-//     const warpedCanvas = document.createElement('canvas');
-//     warpedCanvas.width = dstWidth;
-//     warpedCanvas.height = dstHeight;
-//
-// // 2. 把 warped 的 Mat 显示到 canvas 上
-//     cv.imshow(warpedCanvas, warped);
-//
-// // 3. 在 canvas 上画网格
-//     LegoBoardAnalyzer.drawWarpedGrid(warpedCanvas, this.rows, this.cols, this.cellSize);
-//     document.body.appendChild(warpedCanvas);
-
-    // pre-compute inverse transform for later mapping
     const MInv = cv.getPerspectiveTransform(dstQuad, srcQuadMat);
     console.log('[LBA] warpPerspective 完成，warped 尺寸 =', warped.cols, warped.rows);
 
