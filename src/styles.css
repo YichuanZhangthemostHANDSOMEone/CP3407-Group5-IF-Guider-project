@@ -195,22 +195,45 @@ a {
 }
 
 /* ========== AR 区 ========== */
+/*.ar-container {*/
+/*  position: relative;*/
+/*  width: 640px;   !* 固定像素宽度 *!*/
+/*  height: 480px;  !* 固定像素高度，和摄像头/画布分辨率一致 *!*/
+/*  background: var(--border);*/
+/*  border-radius: 12px;*/
+/*  overflow: hidden;*/
+/*}*/
+/*.ar-video,*/
+/*.overlay-canvas {*/
+/*  position: absolute;*/
+/*  top: 0; left: 0;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  !*object-fit: contain; !* 用 contain 保证不被裁切 *!*!*/
+/*}*/
 .ar-container {
   position: relative;
-  width: 640px;   /* 固定像素宽度 */
-  height: 480px;  /* 固定像素高度，和摄像头/画布分辨率一致 */
+  width: 640px;
+  height: 480px;
   background: var(--border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
+  padding: 0;
+  margin: 0 auto;
+  transform-origin: top left;
 }
-.ar-video,
-.overlay-canvas {
+
+/* video/canvas 必须是物理像素宽高 */
+.ar-video, .overlay-canvas {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  /*object-fit: contain; !* 用 contain 保证不被裁切 *!*/
+  width: 640px;
+  height: 480px;
 }
+
+/* 删除百分比宽高 */
+
+
 
 .step-indicator {
   position: absolute;
