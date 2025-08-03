@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 metric === 'accuracy' ? `${display}%` : String(display);
 
             // 准备图表数据
-            const labels = arr.map((_, i) => `尝试${i + 1}`);
+            const labels = arr.map((_, i) => `Attempts${i + 1}`);
             const values = arr.map(r =>
                 metric === 'score'
                     ? (r.correctCnt || 0)
