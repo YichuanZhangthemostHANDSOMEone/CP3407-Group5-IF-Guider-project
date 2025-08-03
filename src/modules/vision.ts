@@ -232,11 +232,32 @@ export class VisionApp {
         hull.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
         ctx.closePath();
         ctx.stroke();
-        const {x, y} = hull[0];
+        
+        // 计算凸包的边界框以便将文本放在内部
+        let minX = hull[0].x, maxX = hull[0].x;
+        let minY = hull[0].y, maxY = hull[0].y;
+        for (const point of hull) {
+          minX = Math.min(minX, point.x);
+          maxX = Math.max(maxX, point.x);
+          minY = Math.min(minY, point.y);
+          maxY = Math.max(maxY, point.y);
+        }
+        
+        // 计算边界框的中心点
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+        
+        // 获取文本尺寸以便居中显示
+        const text = `${cellsInGroup[0].component}`;
+        const textMetrics = ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const textHeight = 12; // 字体大小
+        
+        // 将文本绘制在边界框中心
         ctx.fillText(
-          `${cellsInGroup[0].protocol} ${cellsInGroup[0].component}`,
-          x + 4,
-          y + 4
+          text,
+          centerX - textWidth / 2,
+          centerY + textHeight / 2
         );
       }
     }

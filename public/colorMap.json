@@ -1,11 +1,11 @@
 {
   "OSI": {
-    "应用层":     "White",
-    "表示层":     "Purple",
-    "会话层":     "Blue",
-    "传输层":     "DarkBlue",
-    "网络层":     "Yellow",
-    "数据链路层":  "Green",
-    "物理层":     "Orange"
+    "Application":     "White",
+    "Presentation":     "Purple",
+    "Session":     "Blue",
+    "Transportation":     "DarkBlue",
+    "Network":     "Yellow",
+    "DataLink":  "Green",
+    "Physical":     "Orange"
   }
 }
