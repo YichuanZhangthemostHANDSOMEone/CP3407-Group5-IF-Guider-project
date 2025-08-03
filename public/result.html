@@ -1,4 +1,137 @@
 
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8" />-->
+<!--  <meta name="viewport" content="width=device-width,initial-scale=1" />-->
+<!--  <title>Quiz Results | Lego Network Analyzer</title>-->
+<!--  <link rel="stylesheet" href="styles.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--  &lt;!&ndash; 左侧侧边栏 &ndash;&gt;-->
+<!--  <aside class="sidebar">-->
+<!--    <div class="sidebar-header">-->
+<!--      <div class="logo-icon">-->
+<!--        <svg viewBox="0 0 24 24" fill="currentColor">-->
+<!--          <path d="M4 4h6v6H4V4zm0 8h6v6H4v-6zm8-8h6v6h-6V4zm0 8h6v6h-6v-6z"/>-->
+<!--        </svg>-->
+<!--      </div>-->
+<!--      <h1 class="logo-text">Lego Network Analyzer</h1>-->
+<!--    </div>-->
+<!--    <nav class="sidebar-nav">-->
+<!--      <ul>-->
+<!--        <li><a href="/"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 12l9-9 9 9"/><path d="M9 21V12h6v9"/></svg>AR Tool</a></li>-->
+<!--        <li class="active"><a href="#"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2l4 4-4 4-4-4zM4 10l4 4-4 4-4-4zM20 10l-4 4 4 4 4-4z"/></svg>Results</a></li>-->
+
+<!--      </ul>-->
+<!--    </nav>-->
+<!--  </aside>-->
+
+<!--  &lt;!&ndash; 主区域 &ndash;&gt;-->
+<!--  <main class="main-content">-->
+<!--    &lt;!&ndash; 顶部导航 &ndash;&gt;-->
+<!--    <header class="header-nav">-->
+<!--      <div class="nav-left"></div>-->
+<!--      <nav class="topnav">-->
+<!--        <a href="/">Home</a>-->
+
+<!--      </nav>-->
+<!--      <div class="nav-right">-->
+<!--        <button class="btn-icon bell">-->
+<!--          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2">-->
+<!--            <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>-->
+<!--            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>-->
+<!--          </svg>-->
+<!--        </button>-->
+<!--        <button id="authBtn" class="btn-primary">-->
+<!--          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>-->
+<!--            <polyline points="16 17 21 12 16 7"/>-->
+<!--            <line x1="21" y1="12" x2="9" y2="12"/>-->
+<!--          </svg>-->
+<!--          Logout-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </header>-->
+
+<!--    &lt;!&ndash; 结果卡片 &ndash;&gt;-->
+<!--    <section class="result-section">-->
+<!--      <div class="result-card">-->
+<!--        <div class="trophy-icon">-->
+<!--          <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">-->
+<!--            <path d="M8 2h8l1 7H7L8 2zM5 9v4c0 5 2 8 7 8s7-3 7-8V9H5z"/>-->
+<!--          </svg>-->
+<!--        </div>-->
+<!--        <h1>Congratulations!</h1>-->
+<!--        <p>You have completed the quiz.</p>-->
+
+<!--        &lt;!&ndash; 圆环进度 &ndash;&gt;-->
+<!--        <div class="circle-progress">-->
+<!--          <svg viewBox="0 0 150 150">-->
+<!--            <circle cx="75" cy="75" r="70" class="bg"></circle>-->
+<!--            <circle cx="75" cy="75" r="70" class="progress"></circle>-->
+<!--          </svg>-->
+<!--          <div class="percent" id="percent">0%</div>-->
+<!--        </div>-->
+
+<!--        <div class="score-text" id="score">0 / 0 correct</div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; 统计卡片 &ndash;&gt;-->
+<!--      <div class="stats-cards">-->
+<!--        <div class="stat-card">-->
+<!--          <div class="stat-icon">-->
+<!--            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2">-->
+<!--              <path d="M12 6v6l4 2M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="stat-info">-->
+<!--            <div class="stat-title">Total Time</div>-->
+<!--            <div class="stat-value" id="time">0s</div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="stat-card">-->
+<!--          <div class="stat-icon success">-->
+<!--            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--              <polyline points="20 6 9 17 4 12"/>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="stat-info">-->
+<!--            <div class="stat-title">Accuracy</div>-->
+<!--            <div class="stat-value" id="acc">0%</div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="stat-card">-->
+<!--          <div class="stat-icon suggestion">-->
+<!--            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--              <circle cx="12" cy="12" r="10"/>-->
+<!--              <line x1="12" y1="8" x2="12" y2="12"/>-->
+<!--              <line x1="12" y1="16" x2="12.01" y2="16"/>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="stat-info">-->
+<!--            <div class="stat-title">Suggestion</div>-->
+<!--            <div class="stat-value" id="suggestion">–</div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; 操作按钮 &ndash;&gt;-->
+<!--      <div class="actions">-->
+<!--        <button id="retakeBtn" class="btn-secondary">Retake Quiz</button>-->
+<!--        <button id="homeBtn" class="btn-primary">Back to Home</button>-->
+<!--      </div>-->
+<!--    </section>-->
+<!--  </main>-->
+<!--</div>-->
+
+<!--<script src="/result.bundle.js" defer></script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +156,6 @@
       <ul>
         <li><a href="/"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 12l9-9 9 9"/><path d="M9 21V12h6v9"/></svg>AR Tool</a></li>
         <li class="active"><a href="#"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2l4 4-4 4-4-4zM4 10l4 4-4 4-4-4zM20 10l-4 4 4 4 4-4z"/></svg>Results</a></li>
-
       </ul>
     </nav>
   </aside>
@@ -35,7 +167,6 @@
       <div class="nav-left"></div>
       <nav class="topnav">
         <a href="/">Home</a>
-
       </nav>
       <div class="nav-right">
         <button class="btn-icon bell">
@@ -63,9 +194,8 @@
             <path d="M8 2h8l1 7H7L8 2zM5 9v4c0 5 2 8 7 8s7-3 7-8V9H5z"/>
           </svg>
         </div>
-        <h1>Congratulations!</h1>
+        <div class="main-suggestion" id="main-suggestion"></div>
         <p>You have completed the quiz.</p>
-
         <!-- 圆环进度 -->
         <div class="circle-progress">
           <svg viewBox="0 0 150 150">
@@ -73,8 +203,8 @@
             <circle cx="75" cy="75" r="70" class="progress"></circle>
           </svg>
           <div class="percent" id="percent">0%</div>
-        </div>
 
+        </div>
         <div class="score-text" id="score">0 / 0 correct</div>
       </div>
 
@@ -91,7 +221,6 @@
             <div class="stat-value" id="time">0s</div>
           </div>
         </div>
-
         <div class="stat-card">
           <div class="stat-icon success">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -103,7 +232,6 @@
             <div class="stat-value" id="acc">0%</div>
           </div>
         </div>
-
         <div class="stat-card">
           <div class="stat-icon suggestion">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -118,7 +246,6 @@
           </div>
         </div>
       </div>
-
       <!-- 操作按钮 -->
       <div class="actions">
         <button id="retakeBtn" class="btn-secondary">Retake Quiz</button>
@@ -127,7 +254,6 @@
     </section>
   </main>
 </div>
-
 <script src="/result.bundle.js" defer></script>
 </body>
 </html>

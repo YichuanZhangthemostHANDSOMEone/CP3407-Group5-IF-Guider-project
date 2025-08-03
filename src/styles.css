@@ -2655,3 +2655,14 @@ a {
 .analysis-empty ul li::marker {
   color: #4facfe;
 }
+
+
+
+.main-suggestion {
+  margin-top: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #4f46e5;
+  min-height: 28px;
+  text-align: center;
+}
