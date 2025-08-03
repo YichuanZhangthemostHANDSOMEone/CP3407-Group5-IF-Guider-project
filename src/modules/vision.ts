@@ -59,7 +59,7 @@ export class VisionApp {
     const cells = await this.analyzer.analyze(this.capture);
 
     // ====== 可选调试代码：画出 warp 后的标准网格 ======
-    this.drawWarpedDebugGrid();
+    // this.drawWarpedDebugGrid();
 
     // ============ 正常流程：画 overlay ============
     this.draw(cells);
@@ -70,112 +70,112 @@ export class VisionApp {
   /**
    * 调试用：显示 warp 后的标准网格
    */
-  private async drawWarpedDebugGrid() {
-    const dstWidth = this.analyzer.cols * this.analyzer.cellSize;
-    const dstHeight = this.analyzer.rows * this.analyzer.cellSize;
-
-    // 1. 创建 warp 结果 canvas
-    const warpedCanvas = document.createElement('canvas');
-    warpedCanvas.width = dstWidth;
-    warpedCanvas.height = dstHeight;
-
-    // 2. 用 opencv warp 并显示
-    const src = cv.imread(this.capture);
-    const predictions = await this.segmenter.segment(this.capture);
-    if (!predictions || !predictions.length) {
-      src.delete();
-      return;
-    }
-    const ptsArr: number[] = [];
-    for (const p of predictions[0].points) ptsArr.push(p.x, p.y);
-    const poly = cv.matFromArray(predictions[0].points.length, 1, cv.CV_32SC2, ptsArr);
-    const polyVec = new cv.MatVector();
-    polyVec.push_back(poly);
-    const mask = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC1);
-    cv.fillPoly(mask, polyVec, new cv.Scalar(255));
-    const contours = new cv.MatVector();
-    const hierarchy = new cv.Mat();
-    cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-    let boardContour: cv.Mat | null = null;
-    let maxArea = 0;
-    for (let i = 0; i < contours.size(); i++) {
-      const c = contours.get(i);
-      const area = cv.contourArea(c);
-      if (area > maxArea) {
-        maxArea = area;
-        if (boardContour) boardContour.delete();
-        boardContour = c;
-      } else {
-        c.delete();
-      }
-    }
-    contours.delete();
-    hierarchy.delete();
-    mask.delete();
-    poly.delete();
-    polyVec.delete();
-
-    if (!boardContour) {
-      src.delete();
-      return;
-    }
-
-    const peri = cv.arcLength(boardContour, true);
-    const approx = new cv.Mat();
-    const hull = new cv.Mat();
-    cv.convexHull(boardContour, hull, true);
-    cv.approxPolyDP(hull, approx, 0.02 * peri, true);
-    hull.delete();
-    boardContour.delete();
-    if (approx.rows !== 4) {
-      approx.delete();
-      src.delete();
-      return;
-    }
-    const pts: Array<{ x: number; y: number }> = [];
-    const data = approx.data32S;
-    for (let i = 0; i < 4; i++) pts.push({x: data[i * 2], y: data[i * 2 + 1]});
-    approx.delete();
-
-    const dstQuad = cv.matFromArray(4, 1, cv.CV_32FC2, [
-      0, 0,
-      dstWidth - 1, 0,
-      dstWidth - 1, dstHeight - 1,
-      0, dstHeight - 1,
-    ]);
-    const srcQuadMat = cv.matFromArray(4, 1, cv.CV_32FC2, [
-      pts[0].x, pts[0].y,
-      pts[1].x, pts[1].y,
-      pts[2].x, pts[2].y,
-      pts[3].x, pts[3].y,
-    ]);
-
-    const M = cv.getPerspectiveTransform(srcQuadMat, dstQuad);
-    const warped = new cv.Mat();
-    cv.warpPerspective(src, warped, M, new cv.Size(dstWidth, dstHeight));
-    srcQuadMat.delete();
-    dstQuad.delete();
-    src.delete();
-    M.delete();
-
-    // 3. 显示到 canvas
-    cv.imshow(warpedCanvas, warped);
-    warped.delete();
-
-    // 4. 画网格
-    drawWarpedGrid(warpedCanvas, this.analyzer.rows, this.analyzer.cols, this.analyzer.cellSize);
-
-    // 5. 强制样式，确保浮在最上层能看到
-    warpedCanvas.style.position = 'fixed';
-    warpedCanvas.style.zIndex = '9999';
-    warpedCanvas.style.left = '20px';
-    warpedCanvas.style.top = '20px';
-    warpedCanvas.style.border = '2px solid red';
-    warpedCanvas.style.background = '#fff';
-    warpedCanvas.style.display = 'block';
-
-    document.body.appendChild(warpedCanvas);
-  }
+  // private async drawWarpedDebugGrid() {
+  //   const dstWidth = this.analyzer.cols * this.analyzer.cellSize;
+  //   const dstHeight = this.analyzer.rows * this.analyzer.cellSize;
+  //
+  //   // 1. 创建 warp 结果 canvas
+  //   const warpedCanvas = document.createElement('canvas');
+  //   warpedCanvas.width = dstWidth;
+  //   warpedCanvas.height = dstHeight;
+  //
+  //   // 2. 用 opencv warp 并显示
+  //   const src = cv.imread(this.capture);
+  //   const predictions = await this.segmenter.segment(this.capture);
+  //   if (!predictions || !predictions.length) {
+  //     src.delete();
+  //     return;
+  //   }
+  //   const ptsArr: number[] = [];
+  //   for (const p of predictions[0].points) ptsArr.push(p.x, p.y);
+  //   const poly = cv.matFromArray(predictions[0].points.length, 1, cv.CV_32SC2, ptsArr);
+  //   const polyVec = new cv.MatVector();
+  //   polyVec.push_back(poly);
+  //   const mask = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC1);
+  //   cv.fillPoly(mask, polyVec, new cv.Scalar(255));
+  //   const contours = new cv.MatVector();
+  //   const hierarchy = new cv.Mat();
+  //   cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+  //   let boardContour: cv.Mat | null = null;
+  //   let maxArea = 0;
+  //   for (let i = 0; i < contours.size(); i++) {
+  //     const c = contours.get(i);
+  //     const area = cv.contourArea(c);
+  //     if (area > maxArea) {
+  //       maxArea = area;
+  //       if (boardContour) boardContour.delete();
+  //       boardContour = c;
+  //     } else {
+  //       c.delete();
+  //     }
+  //   }
+  //   contours.delete();
+  //   hierarchy.delete();
+  //   mask.delete();
+  //   poly.delete();
+  //   polyVec.delete();
+  //
+  //   if (!boardContour) {
+  //     src.delete();
+  //     return;
+  //   }
+  //
+  //   const peri = cv.arcLength(boardContour, true);
+  //   const approx = new cv.Mat();
+  //   const hull = new cv.Mat();
+  //   cv.convexHull(boardContour, hull, true);
+  //   cv.approxPolyDP(hull, approx, 0.02 * peri, true);
+  //   hull.delete();
+  //   boardContour.delete();
+  //   if (approx.rows !== 4) {
+  //     approx.delete();
+  //     src.delete();
+  //     return;
+  //   }
+  //   const pts: Array<{ x: number; y: number }> = [];
+  //   const data = approx.data32S;
+  //   for (let i = 0; i < 4; i++) pts.push({x: data[i * 2], y: data[i * 2 + 1]});
+  //   approx.delete();
+  //
+  //   const dstQuad = cv.matFromArray(4, 1, cv.CV_32FC2, [
+  //     0, 0,
+  //     dstWidth - 1, 0,
+  //     dstWidth - 1, dstHeight - 1,
+  //     0, dstHeight - 1,
+  //   ]);
+  //   const srcQuadMat = cv.matFromArray(4, 1, cv.CV_32FC2, [
+  //     pts[0].x, pts[0].y,
+  //     pts[1].x, pts[1].y,
+  //     pts[2].x, pts[2].y,
+  //     pts[3].x, pts[3].y,
+  //   ]);
+  //
+  //   const M = cv.getPerspectiveTransform(srcQuadMat, dstQuad);
+  //   const warped = new cv.Mat();
+  //   cv.warpPerspective(src, warped, M, new cv.Size(dstWidth, dstHeight));
+  //   srcQuadMat.delete();
+  //   dstQuad.delete();
+  //   src.delete();
+  //   M.delete();
+  //
+  //   // 3. 显示到 canvas
+  //   cv.imshow(warpedCanvas, warped);
+  //   warped.delete();
+  //
+  //   // 4. 画网格
+  //   drawWarpedGrid(warpedCanvas, this.analyzer.rows, this.analyzer.cols, this.analyzer.cellSize);
+  //
+  //   // 5. 强制样式，确保浮在最上层能看到
+  //   warpedCanvas.style.position = 'fixed';
+  //   warpedCanvas.style.zIndex = '9999';
+  //   warpedCanvas.style.left = '20px';
+  //   warpedCanvas.style.top = '20px';
+  //   warpedCanvas.style.border = '2px solid red';
+  //   warpedCanvas.style.background = '#fff';
+  //   warpedCanvas.style.display = 'block';
+  //
+  //   document.body.appendChild(warpedCanvas);
+  // }
 
   /**
    * 原有 overlay 绘制
