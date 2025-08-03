@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timeEl = document.getElementById('time');
     if (timeEl) timeEl.textContent = `${totalTime}s`;
 
+    const accEl = document.getElementById('acc');
+    if (accEl) accEl.textContent = `${accuracy}%`;
     // —— 8. 更新建议文字（主区域和 Suggestion 卡片都显示） —— //
     const suggestionEl = document.getElementById('suggestion');
     const mainSuggestionEl = document.getElementById('main-suggestion');
