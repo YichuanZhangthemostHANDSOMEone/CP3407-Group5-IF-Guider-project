@@ -251,7 +251,7 @@ export class VisionApp {
         const text = `${cellsInGroup[0].component}`;
         const textMetrics = ctx.measureText(text);
         const textWidth = textMetrics.width;
-        const textHeight = 12; // 字体大小
+        const textHeight = 8; // 字体大小
         
         // 将文本绘制在边界框中心
         ctx.fillText(
