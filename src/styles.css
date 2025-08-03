@@ -207,9 +207,9 @@ a {
 .overlay-canvas {
   position: absolute;
   top: 0; left: 0;
-  width: 640px;   /* 必须和 .ar-container 一致 */
-  height: 480px;
-  object-fit: contain; /* 用 contain 保证不被裁切 */
+  width: 100%;
+  height: 100%;
+  /*object-fit: contain; !* 用 contain 保证不被裁切 *!*/
 }
 
 .step-indicator {

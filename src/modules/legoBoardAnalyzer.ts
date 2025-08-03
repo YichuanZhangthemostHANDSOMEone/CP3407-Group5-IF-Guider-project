@@ -146,6 +146,17 @@ export class LegoBoardAnalyzer {
     const M = cv.getPerspectiveTransform(srcQuadMat, dstQuad);
     const warped = new cv.Mat();
     cv.warpPerspective(rgb, warped, M, new cv.Size(dstWidth, dstHeight));
+//     // 1. 创建一个 canvas 用于显示 warped 结果
+//     const warpedCanvas = document.createElement('canvas');
+//     warpedCanvas.width = dstWidth;
+//     warpedCanvas.height = dstHeight;
+//
+// // 2. 把 warped 的 Mat 显示到 canvas 上
+//     cv.imshow(warpedCanvas, warped);
+//
+// // 3. 在 canvas 上画网格
+//     LegoBoardAnalyzer.drawWarpedGrid(warpedCanvas, this.rows, this.cols, this.cellSize);
+//     document.body.appendChild(warpedCanvas);
 
     // pre-compute inverse transform for later mapping
     const MInv = cv.getPerspectiveTransform(dstQuad, srcQuadMat);
@@ -327,5 +338,55 @@ export class LegoBoardAnalyzer {
       }
     }
     return { name: best ? best.name : 'Unknown', deltaE: minE };
+  }
+  /** ===================== 以下为测试工具方法 ===================== */
+
+  /**
+   * 在 warp 后的 canvas 上画标准网格
+   */
+  static drawWarpedGrid(
+      canvas: HTMLCanvasElement,
+      rows: number,
+      cols: number,
+      cellSize: number
+  ) {
+    const ctx = canvas.getContext('2d')!;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,0,0,0.6)';
+    ctx.lineWidth = 1;
+    for (let r = 0; r <= rows; r++) {
+      ctx.beginPath();
+      ctx.moveTo(0, r * cellSize);
+      ctx.lineTo(cols * cellSize, r * cellSize);
+      ctx.stroke();
+    }
+    for (let c = 0; c <= cols; c++) {
+      ctx.beginPath();
+      ctx.moveTo(c * cellSize, 0);
+      ctx.lineTo(c * cellSize, rows * cellSize);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  /**
+   * 在 overlay 上画所有格子的四角点
+   */
+  static drawCellQuads(
+      overlay: HTMLCanvasElement,
+      cells: { quad: { x: number; y: number }[] }[]
+  ) {
+    const ctx = overlay.getContext('2d')!;
+    ctx.save();
+    ctx.fillStyle = 'lime';
+    ctx.strokeStyle = 'lime';
+    for (const cell of cells) {
+      for (const pt of cell.quad) {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
   }
 }
