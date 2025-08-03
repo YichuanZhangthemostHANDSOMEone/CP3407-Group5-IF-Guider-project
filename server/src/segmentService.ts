@@ -13,11 +13,11 @@ dotenv.config({
 const ROBOFLOW_API_KEY = process.env.ROBOFLOW_API_KEY;
 if (!ROBOFLOW_API_KEY) {
   console.error('Missing ROBOFLOW_API_KEY in .env');
-  process.exit(1);
+  (process as any).exit(1);
 }
 console.log('Loaded ROBOFLOW_API_KEY =', ROBOFLOW_API_KEY);
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 
@@ -67,7 +67,9 @@ app.post('/api/segment', async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Segment service listening on port ${port}`);
-});
+if (require.main === module) {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Segment service listening on port ${port}`);
+  });
+}
