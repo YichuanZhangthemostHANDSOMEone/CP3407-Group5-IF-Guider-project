@@ -20,3 +20,16 @@ export function showLoadingIndicator(show: boolean) {
   (document.getElementById('loading-indicator') as HTMLDivElement).textContent
       = show ? 'Loading WASM...' : '';
 }
+
+export function showProcessingSpinner(show: boolean) {
+  let overlay = document.getElementById('processing-spinner') as HTMLDivElement | null;
+  if (!overlay && show) {
+    overlay = document.createElement('div');
+    overlay.id = 'processing-spinner';
+    overlay.className = 'spinner-overlay';
+    overlay.innerHTML = '<div class="spinner"></div>';
+    document.body.appendChild(overlay);
+  }
+  if (overlay) {
+    overlay.style.display = show ? 'flex' : 'none';
+  }}

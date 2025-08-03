@@ -1,5 +1,3 @@
-
-
 // // src/index.ts
 //
 // import './styles.css';
@@ -106,6 +104,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const captureBtn  = document.getElementById('captureBtn')  as HTMLButtonElement;
   const videoEl     = document.getElementById('video')      as HTMLVideoElement;
   const captureCanvas = document.getElementById('capture')    as HTMLCanvasElement | null;
+  const overlayCanvas = document.getElementById('overlay') as HTMLCanvasElement;
+
 
   // 2️⃣ 监听登录状态
   // @ts-ignore
@@ -171,7 +171,7 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('❌ Cannot find <canvas id="capture">');
       return;
     }
-    const app = new VisionApp(videoEl, captureCanvas);
+    const app = new VisionApp(videoEl, captureCanvas, overlayCanvas);
     await app.start();
     showMessage('Camera ready. Click capture to analyze.');
     bindButton(captureBtn, async () => {

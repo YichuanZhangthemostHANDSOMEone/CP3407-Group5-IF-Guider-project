@@ -63,7 +63,7 @@
                             <line x1="12" y1="16" x2="12" y2="12"/>
                             <line x1="12" y1="8" x2="12.01" y2="8"/>
                         </svg>
-                        <span>About Us</span>
+                        <span> </span>
                     </a>
                 </li>
             </ul>
@@ -85,12 +85,18 @@
         <header class="main-header">
             <nav class="topnav">
                 <a href="/">Home</a>
-                <a href="/services">Services</a>
             </nav>
         </header>
 
         <section class="screen">
-            <h1 class="screen-title">Scan Your Lego Network</h1>
+            <h1 class="screen-title">
+
+                    <svg class="screen-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 4h6v6H4V4zm0 8h6v6H4v-6zm8-8h6v6h-6V4zm0 8h6v6h-6v-6z"/>
+                    </svg>
+
+                Scan Your Lego Network
+            </h1>
             <p class="screen-desc">Position your creation in front of the camera.</p>
 
             <div class="cards">
@@ -124,12 +130,40 @@
                 </div>
 
                 <div class="card analysis-card">
-                    <h2 class="analysis-title">Analysis Results</h2>
+                    <h2 class="analysis-title">Important issue</h2>
                     <div class="analysis-empty">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 2h12l-3 7v7a3 3 0 0 1-6 0V9L6 2z"/>
-                        </svg>
-                        <p>Analysis results will appear here.</p>
+
+
+                        <ol>
+                            <li>
+                                <strong>Lighting conditions</strong>
+                                <ul>
+                                    <li>Avoid strong backlighting or light spots</li>
+                                    <li>Keep the light even; soft light or natural diffused light is recommended</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Background selection</strong>
+                                <ul>
+                                    <li>Use a solid, non-textured background (e.g., white or grey)</li>
+                                    <li>Prevent the background from being too close to the color of the LEGOs</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Camera angle</strong>
+                                <ul>
+                                    <li>It is recommended to shoot vertically and keep the plane of the LEGO model parallel to the lens</li>
+                                    <li>Avoid too much tilting or yawing</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Resolution and focus</strong>
+                                <ul>
+                                    <li>Ensure the camera or phone focuses accurately on the LEGO studs and that their edges are clear</li>
+                                    <li>Use the highest possible resolution to capture fine details</li>
+                                </ul>
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -138,5 +172,14 @@
 </div>
 
 <script src="/main.bundle.js" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.querySelector('.analysis-empty');
+        if (el) {
+            el.scrollTop = 0;
+        }
+    });
+</script>
 </body>
+
 </html>

@@ -1,0 +1,11 @@
+{
+  "OSI": {
+    "Application":     "White",
+    "Presentation":     "Purple",
+    "Session":     "Blue",
+    "Transportation":     "DarkBlue",
+    "Network":     "Yellow",
+    "DataLink":  "Green",
+    "Physical":     "Orange"
+  }
+}

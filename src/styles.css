@@ -150,14 +150,28 @@ a {
 }
 
 /* ========== 扫描 & 结果区 ========== */
+/*.screen-title {*/
+/*  font-size: 28px;*/
+/*  font-weight: 600;*/
+/*}*/
+/*.screen-desc {*/
+/*  margin-top: 4px;*/
+/*  font-size: 16px;*/
+/*  color: var(--gray-500);*/
+/*}*/
 .screen-title {
+  display: inline-flex;       /* 让 icon 和文字在一行 */
+  align-items: center;        /* 垂直居中 */
+  gap: 8px;                   /* icon 与文字之间的间距 */
   font-size: 28px;
   font-weight: 600;
 }
-.screen-desc {
-  margin-top: 4px;
-  font-size: 16px;
-  color: var(--gray-500);
+
+.screen-icon {
+  width: 1.2em;               /* 根据文字大小自动缩放 */
+  height: 1.2em;
+  flex-shrink: 0;             /* 防止在容器压缩时被挤小 */
+  stroke: var(--primary);     /* 或者用 currentColor */
 }
 .cards {
   display: flex;
@@ -181,21 +195,46 @@ a {
 }
 
 /* ========== AR 区 ========== */
+/*.ar-container {*/
+/*  position: relative;*/
+/*  width: 640px;   !* 固定像素宽度 *!*/
+/*  height: 480px;  !* 固定像素高度，和摄像头/画布分辨率一致 *!*/
+/*  background: var(--border);*/
+/*  border-radius: 12px;*/
+/*  overflow: hidden;*/
+/*}*/
+/*.ar-video,*/
+/*.overlay-canvas {*/
+/*  position: absolute;*/
+/*  top: 0; left: 0;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  !*object-fit: contain; !* 用 contain 保证不被裁切 *!*!*/
+/*}*/
 .ar-container {
   position: relative;
-  width: 100%;
-  padding-top: 75%;
+  width: 640px;
+  height: 480px;
   background: var(--border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
+  padding: 0;
+  margin: 0 auto;
+  transform-origin: top left;
 }
-.ar-video,
-.overlay-canvas {
+
+/* video/canvas 必须是物理像素宽高 */
+.ar-video, .overlay-canvas {
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
+  width: 640px;
+  height: 480px;
 }
+
+/* 删除百分比宽高 */
+
+
+
 .step-indicator {
   position: absolute;
   top: 12px; left: 12px;
@@ -272,25 +311,44 @@ a {
 
 /* ========== Analysis 结果空态 ========== */
 .analysis-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  font-size: 24px;
+  font-family: 'Poppins', 'Inter', Arial, sans-serif;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.03em;
+  padding-left: 18px;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  position: relative;
+  /* 文字发光 */
+  text-shadow:
+          0 2px 10px #dbeafe66,
+          0 1px 0 #fff;
 }
-.analysis-empty {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--gray-300);
-  gap: 8px;
+.analysis-title::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 7px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #6366f1, #4facfe, #00f2fe);
+  box-shadow: 0 0 10px #6366f122;
 }
-.analysis-empty svg {
-  width: 48px; height: 48px;
-}
-.analysis-empty p {
-  font-size: 14px;
-}
+/*.analysis-empty {*/
+/*  flex: 1;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  color: var(--gray-300);*/
+/*  gap: 8px;*/
+/*}*/
+/*.analysis-empty svg {*/
+/*  width: 48px; height: 48px;*/
+/*}*/
+/*.analysis-empty p {*/
+/*  font-size: 14px;*/
+/*}*/
 
 /* ========== 登录/注册页面通用 ========== */
 .auth-page {
@@ -2518,4 +2576,82 @@ a {
     align-items: flex-start;
     gap: 16px;
   }
+}
+
+
+
+.analysis-empty {
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow:
+          inset 0 2px 5px rgba(255,255,255,0.6),
+          0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 8px 32px 32px;   /* 上 padding 再小一点更紧凑 */
+  box-sizing: border-box;
+
+  max-height: 420px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.analysis-empty:hover {
+  transform: translateY(-4px);
+  box-shadow:
+          inset 0 2px 5px rgba(255,255,255,0.6),
+          0 12px 32px rgba(0, 0, 0, 0.12);
+}
+/* 滚动条美化不变 */
+.analysis-empty::-webkit-scrollbar {
+  width: 8px;
+}
+.analysis-empty::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.03);
+  border-radius: 4px;
+}
+.analysis-empty::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.analysis-empty::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.2);
+}
+/* 其余列表样式同上 */
+.analysis-empty ol > li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 24px;
+}
+.analysis-empty ol > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  height: calc(100% - 8px);
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #4facfe, #00f2fe);
+}
+.analysis-empty ol > li > strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.analysis-empty ul {
+  margin-left: 1.4em;
+  list-style-type: disc;
+}
+.analysis-empty ul li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: #444444;
+  position: relative;
+  padding-left: 6px;
+}
+.analysis-empty ul li::marker {
+  color: #4facfe;
 }

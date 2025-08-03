@@ -14,7 +14,7 @@ export class BoardRectifier {
     });
   }
 
-  async rectify(canvas: HTMLCanvasElement): Promise<HTMLCanvasElement> {
+  private async getTransformData(canvas: HTMLCanvasElement): Promise<{ M: any; width: number; height: number } | null> {
     await this.initialized;
     const src = cv.imread(canvas);
 
@@ -58,8 +58,7 @@ export class BoardRectifier {
     if (!board) {
       src.delete();
       contours.delete();
-      // no board detected, return original canvas
-      return canvas;
+      return null;
     }
 
     const data = board.data32S;
@@ -67,7 +66,6 @@ export class BoardRectifier {
     for (let i = 0; i < 4; i++) {
       pts.push({ x: data[i * 2], y: data[i * 2 + 1] });
     }
-    // order points: top-left, top-right, bottom-right, bottom-left
     pts.sort((a, b) => a.y - b.y);
     const [top1, top2, bottom1, bottom2] = pts;
     const tl = top1.x < top2.x ? top1 : top2;
@@ -96,23 +94,44 @@ export class BoardRectifier {
       0, dstHeight - 1,
     ]);
     const M = cv.getPerspectiveTransform(srcTri, dstTri);
-    const dst = new cv.Mat();
-    cv.warpPerspective(src, dst, M, new cv.Size(dstWidth, dstHeight));
 
-    const outCanvas = document.createElement('canvas');
-    outCanvas.width = dstWidth;
-    outCanvas.height = dstHeight;
-    cv.imshow(outCanvas, dst);
-
-    // cleanup
+    // cleanup mats that are no longer needed
     src.delete();
     contours.delete();
     board.delete();
     srcTri.delete();
     dstTri.delete();
-    M.delete();
-    dst.delete();
 
-    return outCanvas;
+    return { M, width: dstWidth, height: dstHeight };
+  }
+
+  private warpCanvas(srcCanvas: HTMLCanvasElement, M: any, width: number, height: number, isMask = false): HTMLCanvasElement {
+    const src = cv.imread(srcCanvas);
+    const dst = new cv.Mat();
+    cv.warpPerspective(src, dst, M, new cv.Size(width, height), isMask ? cv.INTER_NEAREST : cv.INTER_LINEAR);
+    const out = document.createElement('canvas');
+    out.width = width;
+    out.height = height;
+    cv.imshow(out, dst);
+    src.delete();
+    dst.delete();
+    return out;
+  }
+
+  async rectify(canvas: HTMLCanvasElement): Promise<HTMLCanvasElement> {
+    const data = await this.getTransformData(canvas);
+    if (!data) return canvas;
+    const out = this.warpCanvas(canvas, data.M, data.width, data.height);
+    data.M.delete();
+    return out;
+  }
+
+  async rectifyWithMask(canvas: HTMLCanvasElement, mask: HTMLCanvasElement): Promise<{ canvas: HTMLCanvasElement; mask: HTMLCanvasElement }> {
+    const data = await this.getTransformData(canvas);
+    if (!data) return { canvas, mask };
+    const outCanvas = this.warpCanvas(canvas, data.M, data.width, data.height);
+    const outMask = this.warpCanvas(mask, data.M, data.width, data.height, true);
+    data.M.delete();
+    return { canvas: outCanvas, mask: outMask };
   }
 }
