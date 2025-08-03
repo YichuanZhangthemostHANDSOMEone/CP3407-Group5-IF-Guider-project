@@ -1,5 +1,5 @@
 // segmentService.ts
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -12,16 +12,11 @@ dotenv.config({
 
 const ROBOFLOW_API_KEY = process.env.ROBOFLOW_API_KEY;
 if (!ROBOFLOW_API_KEY) {
-  console.error('Missing ROBOFLOW_API_KEY in .env');
-  process.exit(1);
+  throw new Error('Missing ROBOFLOW_API_KEY in .env');
 }
 console.log('Loaded ROBOFLOW_API_KEY =', ROBOFLOW_API_KEY);
 
-const app = express();
-app.use(cors());
-app.use(express.json({ limit: '20mb' }));
-
-app.post('/api/segment', async (req, res) => {
+export const segmentHandler = async (req: Request, res: Response) => {
   const { imageBase64 } = req.body;
   if (!imageBase64 || typeof imageBase64 !== 'string') {
     return res.status(400).json({ error: 'imageBase64 is required' });
@@ -65,9 +60,19 @@ app.post('/api/segment', async (req, res) => {
     console.error(err);
     return res.status(500).json({ error: 'Unexpected server error' });
   }
-});
+};
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Segment service listening on port ${port}`);
-});
+export function createApp() {
+  const app = express();
+  app.use(cors());
+  app.use(express.json({ limit: '20mb' }));
+  app.post('/api/segment', segmentHandler);
+  return app;
+}
+
+if (require.main === module) {
+  const port = process.env.PORT || 3000;
+  createApp().listen(port, () => {
+    console.log(`Segment service listening on port ${port}`);
+  });
+}
